@@ -21,7 +21,8 @@ class CNCMachineController extends Controller
      *
      * After initial registration this API issues a call to a Machine's API to fetch more details.
      *
-     * Periodically, this API will check if each machine is 'alive' based on the submitted API address.
+     * Periodically, this API will check if each machine is 'alive' based on the submitted IP address,
+     * by calling /ping on each.
      *
      * @Route("/register", name="register")
      * @Method({"POST"})
