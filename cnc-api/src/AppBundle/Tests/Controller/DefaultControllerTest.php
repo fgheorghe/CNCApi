@@ -6,13 +6,12 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class DefaultControllerTest extends WebTestCase
 {
-    public function testIndex()
+    public function testEhlo()
     {
         $client = static::createClient();
-
-        $crawler = $client->request('GET', '/');
-
+        $client->request('GET', '/ehlo');
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        $this->assertContains('Welcome to Symfony', $crawler->filter('#container h1')->text());
+        $this->assertEquals("application/json", $client->getResponse()->headers->get("Content-Type"));
+        $this->assertEquals('{"version":{"major":0,"minor":1,"revision":0}}', $client->getResponse()->getContent());
     }
 }

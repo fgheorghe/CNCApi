@@ -31,7 +31,7 @@ class DefaultController extends Controller
      *  resource=true
      * )
      */
-    public function indexAction(Request $request)
+    public function ehloAction(Request $request)
     {
         // Return version object.
         return $this->render('default/index.html.twig', array(
