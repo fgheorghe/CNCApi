@@ -24,7 +24,7 @@ Edit cnc-api/app/config/parameters.yml
 
 As per Symfony 2 documentation, issue:
 
-cd cnc-api && php app/console server:run
+cd cnc-api && php app/console server:run 0.0.0.0:8000
 
 Browse:
 
