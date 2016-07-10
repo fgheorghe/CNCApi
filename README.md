@@ -29,3 +29,7 @@ cd cnc-api && php app/console server:run
 Browse:
 
 http://localhost:8000
+
+###Notes:
+
+Versioning is stored in: app/config/version.yml
