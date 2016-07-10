@@ -26,6 +26,10 @@ As per Symfony 2 documentation, issue:
 
 cd cnc-api && php app/console server:run 0.0.0.0:8000
 
+Or to start as a background process:
+
+cd cnc-api && nohup php app/console server:run 0.0.0.0:8000 &
+
 Browse:
 
 http://localhost:8000
