@@ -75,4 +75,28 @@ EOT;
             $stlFileReader->getFacetNormals()
         );
     }
+
+    function testFacetNormalCoordinatesAreExtracted() {
+        $stlFileReader = new STLFileReader(
+            $this->stlFileString
+        );
+
+        $this->assertEquals(
+            array(
+                0,
+                1,
+                2
+            ),
+            $stlFileReader->getFacetNormalCoordinates($this->facetNormal1)
+        );
+
+        $this->assertEquals(
+            array(
+                10,
+                11,
+                12
+            ),
+            $stlFileReader->getFacetNormalCoordinates($this->facetNormal1)
+        );
+    }
 }
