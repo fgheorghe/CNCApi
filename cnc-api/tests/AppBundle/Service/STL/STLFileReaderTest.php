@@ -26,6 +26,26 @@ solid TEST
 endsolid TEST
 EOT;
 
+    private $facetNormal1 = <<<EOT
+facet normal 0 1 2
+    outerloop
+        vertex 3 4 5
+        vertex 5 4 6
+        vertex 7 8 9
+    endloop
+endfacet
+EOT;
+
+    private $facetNormal2 = <<<EOT
+facet normal 10 11 12
+    outerloop
+        vertex 12 14 15
+        vertex 16 17 18
+        vertex 19 20 21
+    endloop
+endfacet
+EOT;
+
     public function testFileStringIsSetByConstructor() {
         $stlFileReaderMock = \Mockery::mock(STLFileReader::class)->shouldAllowMockingProtectedMethods();
 
@@ -43,6 +63,16 @@ EOT;
     }
 
     public function testFacetNormalsAreReturnedAsArray() {
-        $this->markTestIncomplete();
+        $stlFileReader = new STLFileReader(
+            $this->stlFileString
+        );
+
+        $this->assertEquals(
+            array(
+                $this->facetNormal1,
+                $this->facetNormal2
+            ),
+            $stlFileReader->getFacetNormals()
+        );
     }
 }
