@@ -69,4 +69,21 @@ class STLFileReader
 
         return $facetStrings;
     }
+
+    /**
+     * Extracts coordinates from a give facet normal string block.
+     *
+     * @param string $facetNormal
+     * @return array
+     */
+    public function getFacetNormalCoordinates(string $facetNormal) : array {
+        $firstLine = explode("\n",$facetNormal)[0];
+        $bits = explode(" ", $firstLine);
+
+        return array(
+            $bits[2],
+            $bits[3],
+            $bits[4]
+        );
+    }
 }

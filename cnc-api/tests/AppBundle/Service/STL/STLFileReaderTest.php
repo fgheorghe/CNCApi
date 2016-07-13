@@ -96,7 +96,7 @@ EOT;
                 11,
                 12
             ),
-            $stlFileReader->getFacetNormalCoordinates($this->facetNormal1)
+            $stlFileReader->getFacetNormalCoordinates($this->facetNormal2)
         );
     }
 }
