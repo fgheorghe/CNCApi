@@ -2,7 +2,8 @@ app:
     resource: "@AppBundle/Controller/"
     type:     annotation
 
-# As per: http://symfony.com/doc/current/bundles/NelmioApiDocBundle/index.html
+# As per: https://github.com/nelmio/NelmioApiDocBundle/blob/master/Resources/doc/index.rst
+# app/config/routing.yml
 NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
     prefix:   /api/doc
