@@ -9,9 +9,14 @@
 namespace AppBundle\Service\STL;
 use Symfony\Component\DependencyInjection\Container;
 
+/**
+ * Class STL. Provides STL conversion functionality.
+ * @package AppBundle\Service\STL
+ */
 class STL
 {
     private $container;
+    private $stlFileReader;
 
     /**
      * @return mixed
