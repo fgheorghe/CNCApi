@@ -38,4 +38,35 @@ class STLFileReader
     {
         $this->setStlFileString($stlFileString);
     }
+
+    /**
+     * Extracts facet normals from set string.
+     *
+     * @return array
+     */
+    public function getFacetNormals() : array {
+        $facetStrings = array();
+        $currentFacetString = 0;
+        $lines = explode("\n", $this->getStlFileString());
+
+        foreach ($lines as $line) {
+            // Ignore lines start with 'solid' and 'endsolid'
+            if (substr(trim($line), 0, 5) == "solid" || substr(trim($line), 0, 8) == "endsolid") {
+                continue;
+            }
+
+            // Append to current facet string.
+            $facetStrings[$currentFacetString] = ($facetStrings[$currentFacetString] ?? "") . trim($line) . "\n";
+
+            // Move to next facet if this block is done.
+            if (substr(trim($line), 0, 8) == "endfacet") {
+                // Remove last EOL.
+                $facetStrings[$currentFacetString] = trim($facetStrings[$currentFacetString]);
+                // Move to next facet.
+                $currentFacetString++;
+            }
+        }
+
+        return $facetStrings;
+    }
 }
