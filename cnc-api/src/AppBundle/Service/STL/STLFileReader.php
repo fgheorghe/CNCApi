@@ -8,7 +8,10 @@
 
 namespace AppBundle\Service\STL;
 
-
+/**
+ * Class STLFileReader. Used for parsing STL files contents - not reading disk files.
+ * @package AppBundle\Service\STL
+ */
 class STLFileReader
 {
 
