@@ -22,7 +22,7 @@ class STL
     /**
      * @return mixed
      */
-    public function getStlFileReader()
+    public function getStlFileReader() : STLFileReader
     {
         return $this->stlFileReader;
     }
@@ -40,7 +40,7 @@ class STL
     /**
      * @return mixed
      */
-    protected function getContainer()
+    protected function getContainer() : Container
     {
         return $this->container;
     }

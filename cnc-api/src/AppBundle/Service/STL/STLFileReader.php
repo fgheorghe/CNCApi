@@ -14,5 +14,28 @@ namespace AppBundle\Service\STL;
  */
 class STLFileReader
 {
+    protected $stlFileString;
 
+    /**
+     * @return mixed
+     */
+    public function getStlFileString() : string
+    {
+        return $this->stlFileString;
+    }
+
+    /**
+     * @param mixed $stlFileString
+     * @return STLFileReader
+     */
+    public function setStlFileString(string $stlFileString)
+    {
+        $this->stlFileString = $stlFileString;
+        return $this;
+    }
+
+    public function __construct(string $stlFileString)
+    {
+        $this->setStlFileString($stlFileString);
+    }
 }
