@@ -99,4 +99,25 @@ EOT;
             $stlFileReader->getFacetNormalCoordinates($this->facetNormal2)
         );
     }
+
+    function testVertexCoordinatesAreExtracted() {
+        $stlFileReader = new STLFileReader(
+            $this->stlFileString
+        );
+
+        $this->assertEquals(
+            array(
+                array(
+                    3, 4, 5
+                ),
+                array(
+                    5, 4, 6
+                ),
+                array(
+                    7, 8, 9
+                )
+            ),
+            $stlFileReader->getFacetVertexCoordinates($this->facetNormal1)
+        );
+    }
 }

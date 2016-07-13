@@ -50,7 +50,7 @@ class STLFileReader
         $lines = explode("\n", $this->getStlFileString());
 
         foreach ($lines as $line) {
-            // Ignore lines start with 'solid' and 'endsolid'
+            // Ignore lines starting with 'solid' and 'endsolid'
             if (substr(trim($line), 0, 5) == "solid" || substr(trim($line), 0, 8) == "endsolid") {
                 continue;
             }
@@ -71,7 +71,7 @@ class STLFileReader
     }
 
     /**
-     * Extracts coordinates from a give facet normal string block.
+     * Extracts coordinates from a given facet normal string block.
      *
      * @param string $facetNormal
      * @return array
@@ -85,5 +85,29 @@ class STLFileReader
             $bits[3],
             $bits[4]
         );
+    }
+
+    /**
+     * Extracts facet vertex coordinates from a given facet normal string block.
+     *
+     * @param string $facetNormal
+     * @return array
+     */
+    public function getFacetVertexCoordinates(string $facetNormal) : array {
+        $lines = explode("\n", $facetNormal);
+        $coordinates = array();
+
+        // Ignore first, second, second to last and last lines, as these define the facet normal start and end and outer
+        // loops start and end.
+        for ($i = 2; $i < count($lines) - 2; $i++) {
+            $bits = explode(" ", $lines[$i]);
+            $coordinates[] = array(
+                $bits[1],
+                $bits[2],
+                $bits[3]
+            );
+        }
+
+        return $coordinates;
     }
 }
