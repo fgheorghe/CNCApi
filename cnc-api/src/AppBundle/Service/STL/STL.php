@@ -8,6 +8,7 @@
 
 namespace AppBundle\Service\STL;
 use Symfony\Component\DependencyInjection\Container;
+use AppBundle\Service\STL\STLFileReader;
 
 /**
  * Class STL. Provides STL conversion functionality.
@@ -21,6 +22,24 @@ class STL
     /**
      * @return mixed
      */
+    public function getStlFileReader()
+    {
+        return $this->stlFileReader;
+    }
+
+    /**
+     * @param mixed $stlFileReader
+     * @return STL
+     */
+    public function setStlFileReader(STLFileReader $stlFileReader)
+    {
+        $this->stlFileReader = $stlFileReader;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
     protected function getContainer()
     {
         return $this->container;
@@ -30,13 +49,14 @@ class STL
      * @param mixed $container
      * @return STL
      */
-    protected function setContainer($container)
+    protected function setContainer(Container $container)
     {
         $this->container = $container;
         return $this;
     }
 
-    public function __construct(Container $container) {
+    public function __construct(Container $container, STLFileReader $stlFileReader) {
         $this->setContainer($container);
+        $this->setStlFileReader($stlFileReader);
     }
 }
