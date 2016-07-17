@@ -42,7 +42,7 @@ solid TEST2
             vertex 19 20 21
         endloop
     endfacet
-endsolid TEST
+endsolid TEST2
 EOT;
 
     private $facetNormal1 = <<<EOT
