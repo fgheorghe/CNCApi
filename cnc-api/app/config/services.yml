@@ -6,7 +6,7 @@ parameters:
 services:
     stl:
         class: AppBundle\Service\STL\STL
-        arguments: [ "@service_container", 'stlFileReader' ]
+        arguments: [ "@service_container", 'stlFileReader', 'stlEdit' ]
     stlFileReader:
         class: AppBundle\Service\STL\STLFileReader
         arguments: []
