@@ -110,4 +110,13 @@ class STLFileReader
 
         return $coordinates;
     }
+
+    /**
+     * Returns the name of the solid in this file.
+     *
+     * @return string
+     */
+    public function getName() : string {
+        return explode(" ", trim(explode("\n", $this->getStlFileString())[0]))[1];
+    }
 }
