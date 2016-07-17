@@ -10,3 +10,6 @@ services:
     stlFileReader:
         class: AppBundle\Service\STL\STLFileReader
         arguments: []
+    stlEdit:
+        class: AppBundle\Service\STL\STLEdit
+        arguments: []
