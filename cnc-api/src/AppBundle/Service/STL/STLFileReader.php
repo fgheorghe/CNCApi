@@ -150,4 +150,31 @@ class STLFileReader
             "facet-normals" => $facetNormals
         );
     }
+
+    /**
+     * Re-packs an STL file array into a string, and sets it as the file content of this object.
+     *
+     * @param $stlFileArray array
+     * @return STLFileReader
+     */
+    public function setStlFileStringFromArray(array $stlFileArray) : STLFileReader {
+        // Set name.
+        $stlFileContent = "solid " . $stlFileArray["name"] . "\n";
+
+        foreach ($stlFileArray["facet-normals"] as $facetNormal) {
+            $stlFileContent .= "    facet normal " . implode(" ", $facetNormal["coordinates"]) . "\n        outerloop\n";
+
+            foreach ($facetNormal["vertices"] as $vertex) {
+                $stlFileContent .= "            vertex " . implode(" ", $vertex) . "\n";
+            }
+
+            $stlFileContent .= "        endloop\n    endfacet\n";
+        }
+
+        $stlFileContent .= "endsolid " . $stlFileArray["name"];
+
+        $this->setStlFileString($stlFileContent);
+
+        return $this;
+    }
 }
