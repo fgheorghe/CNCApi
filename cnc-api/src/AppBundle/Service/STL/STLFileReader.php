@@ -119,4 +119,6 @@ class STLFileReader
     public function getName() : string {
         return explode(" ", trim(explode("\n", $this->getStlFileString())[0]))[1];
     }
+
+
 }

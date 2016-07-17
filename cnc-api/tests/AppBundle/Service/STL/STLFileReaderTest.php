@@ -179,7 +179,7 @@ EOT;
                     )
                 )
             ),
-            (array) $stlFileReader
+            $stlFileReader->toArray()
         );
     }
 }
