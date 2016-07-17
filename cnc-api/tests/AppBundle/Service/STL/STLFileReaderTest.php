@@ -26,6 +26,25 @@ solid TEST
 endsolid TEST
 EOT;
 
+    private $stlFileString2 = <<<EOT
+solid TEST2
+    facet normal 0 1 2
+        outerloop
+            vertex 3 4 5
+            vertex 5 4 6
+            vertex 7 8 9
+        endloop
+    endfacet
+    facet normal 10 11 12
+        outerloop
+            vertex 12 14 15
+            vertex 16 17 18
+            vertex 19 20 21
+        endloop
+    endfacet
+endsolid TEST
+EOT;
+
     private $facetNormal1 = <<<EOT
 facet normal 0 1 2
 outerloop
@@ -180,6 +199,59 @@ EOT;
                 )
             ),
             $stlFileReader->toArray()
+        );
+    }
+
+    public function testSetStlFileStringFromArray() {
+        $stlFileReader = new STLFileReader(
+            $this->stlFileString
+        );
+
+        $stlFileReader->setStlFileStringFromArray(array(
+            "name" => "TEST2",
+            "facet-normals" => array(
+                array(
+                    "coordinates" => array(
+                        0,
+                        1,
+                        2
+                    ),
+                    "vertices" => array(
+                        array(
+                            3, 4, 5
+                        ),
+                        array(
+                            5, 4, 6
+                        ),
+                        array(
+                            7, 8, 9
+                        )
+                    )
+                ),
+                array(
+                    "coordinates" => array(
+                        10,
+                        11,
+                        12
+                    ),
+                    "vertices" => array(
+                        array(
+                            12, 14, 15
+                        ),
+                        array(
+                            16, 17, 18
+                        ),
+                        array(
+                            19, 20, 21
+                        )
+                    )
+                )
+            )
+        ));
+
+        $this->assertEquals(
+            $stlFileReader->getStlFileString(),
+            $this->stlFileString2
         );
     }
 }
