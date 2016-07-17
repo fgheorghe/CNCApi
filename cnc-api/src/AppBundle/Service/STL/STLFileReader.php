@@ -120,5 +120,34 @@ class STLFileReader
         return explode(" ", trim(explode("\n", $this->getStlFileString())[0]))[1];
     }
 
+    /**
+     * Method used for converting the STL file to an associative array.
+     *
+     * The following keys are set:
+     * - name -> name of STL object.
+     * -> facet-normals -> numeric array of facet normal blocks, with the following items per each key
+     * coordinates -> facet normal coordinates
+     * vertices -> numeric array of vertex coordinates arrays
+     *
+     * @return array
+     */
+    public function toArray() : array {
+        $name = $this->getName();
 
+        $facetNormals = array();
+
+        foreach ($this->getFacetNormals() as $facetNormal) {
+            $facet = array(
+                "coordinates" => $this->getFacetNormalCoordinates($facetNormal),
+                "vertices" => $this->getFacetVertexCoordinates($facetNormal)
+            );
+
+            $facetNormals[] = $facet;
+        }
+
+        return array(
+            "name" => $name,
+            "facet-normals" => $facetNormals
+        );
+    }
 }
