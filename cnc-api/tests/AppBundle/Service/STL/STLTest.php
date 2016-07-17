@@ -5,7 +5,7 @@ namespace AppBundle\Tests\Service\STL;
 use Symfony\Component\DependencyInjection\Container;
 use AppBundle\Service\STL\STL;
 use AppBundle\Service\STL\STLFileReader;
-use AppBundle\Service\STL\STLEdit;
+use AppBundle\Service\STL\STLMillingEdit;
 
 class STLTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,7 +18,7 @@ class STLTest extends \PHPUnit_Framework_TestCase
         // Service and stl file reader container mocks.
         $containerMock = \Mockery::mock(Container::class);
         $stlFileReaderMock = \Mockery::mock(STLFileReader::class);
-        $stlEditorMock = \Mockery::mock(STLEdit::class);
+        $stlMillingEditorMock = \Mockery::mock(STLMillingEdit::class);
 
         // Prepare a mock of the setContainer method.
         $stlLibraryMock = \Mockery::mock(STL::class)
@@ -32,8 +32,8 @@ class STLTest extends \PHPUnit_Framework_TestCase
             ->with($stlFileReaderMock)
             ->once();
 
-        $stlLibraryMock->shouldReceive('setStlEditor')
-            ->with($stlEditorMock)
+        $stlLibraryMock->shouldReceive('setStlMillingEditor')
+            ->with($stlMillingEditorMock)
             ->once();
 
         // Now get the original constructor.
@@ -45,7 +45,7 @@ class STLTest extends \PHPUnit_Framework_TestCase
             $stlLibraryMock,
             $containerMock,
             $stlFileReaderMock,
-            $stlEditorMock
+            $stlMillingEditorMock
         );
     }
 }

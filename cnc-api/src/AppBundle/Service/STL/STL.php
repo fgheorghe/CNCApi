@@ -9,7 +9,7 @@
 namespace AppBundle\Service\STL;
 use Symfony\Component\DependencyInjection\Container;
 use AppBundle\Service\STL\STLFileReader;
-use AppBundle\Service\STL\STLEdit;
+use AppBundle\Service\STL\STLMillingEdit;
 
 /**
  * Class STL. Provides STL conversion functionality.
@@ -19,23 +19,23 @@ class STL
 {
     private $container;
     private $stlFileReader;
-    private $stlEditor;
+    private $stlMillingEditor;
 
     /**
-     * @return STLEdit
+     * @return STLMillingEdit
      */
-    public function getStlEditor() : STLEdit
+    public function getStlMillingEditor() : STLMillingEdit
     {
-        return $this->stlEditor;
+        return $this->stlMillingEditor;
     }
 
     /**
      * @param mixed $stlEditor
      * @return STL
      */
-    public function setStlEditor(STLEdit $stlEditor) : STL
+    public function setStlMillingEditor(STLMillingEdit $stlEditor) : STL
     {
-        $this->stlEditor = $stlEditor;
+        $this->stlMillingEditor = $stlEditor;
         return $this;
     }
 
@@ -75,9 +75,9 @@ class STL
         return $this;
     }
 
-    public function __construct(Container $container, STLFileReader $stlFileReader, STLEdit $stlEditor) {
+    public function __construct(Container $container, STLFileReader $stlFileReader, STLMillingEdit $stlEditor) {
         $this->setContainer($container);
         $this->setStlFileReader($stlFileReader);
-        $this->setStlEditor($stlEditor);
+        $this->setStlMillingEditor($stlEditor);
     }
 }
