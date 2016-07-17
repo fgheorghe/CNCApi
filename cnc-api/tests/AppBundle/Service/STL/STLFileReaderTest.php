@@ -11,7 +11,7 @@ class STLFileReaderTest extends \PHPUnit_Framework_TestCase
 solid TEST
     facet normal 0 1 2
         outerloop
-            vertex 3 4 5
+            vertex -1.793617e-01 -2.566654e-02 5.000000e+00
             vertex 5 4 6
             vertex 7 8 9
         endloop
@@ -48,7 +48,7 @@ EOT;
     private $facetNormal1 = <<<EOT
 facet normal 0 1 2
 outerloop
-vertex 3 4 5
+vertex -1.793617e-01 -2.566654e-02 5.000000e+00
 vertex 5 4 6
 vertex 7 8 9
 endloop
@@ -138,7 +138,7 @@ EOT;
         $this->assertEquals(
             array(
                 array(
-                    3, 4, 5
+                    -0.17936170000000001, -0.025666540000000002, 5
                 ),
                 array(
                     5, 4, 6
@@ -168,7 +168,7 @@ EOT;
                         ),
                         "vertices" => array(
                             array(
-                                3, 4, 5
+                                -0.17936170000000001, -0.025666540000000002, 5
                             ),
                             array(
                                 5, 4, 6

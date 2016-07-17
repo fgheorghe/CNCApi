@@ -81,9 +81,9 @@ class STLFileReader
         $bits = explode(" ", $firstLine);
 
         return array(
-            $bits[2],
-            $bits[3],
-            $bits[4]
+            (float) $bits[2],
+            (float) $bits[3],
+            (float) $bits[4]
         );
     }
 
@@ -102,9 +102,9 @@ class STLFileReader
         for ($i = 2; $i < count($lines) - 2; $i++) {
             $bits = explode(" ", $lines[$i]);
             $coordinates[] = array(
-                $bits[1],
-                $bits[2],
-                $bits[3]
+                (float) $bits[1],
+                (float) $bits[2],
+                (float) $bits[3]
             );
         }
 
