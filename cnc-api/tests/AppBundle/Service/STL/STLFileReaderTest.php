@@ -46,6 +46,17 @@ endloop
 endfacet
 EOT;
 
+    public function testGetName() {
+        $stlFileReader = new STLFileReader(
+            $this->stlFileString
+        );
+
+        $this->assertEquals(
+            "TEST",
+            $stlFileReader->getName()
+        );
+    }
+
     public function testFileStringIsSetByConstructor() {
         $stlFileReaderMock = \Mockery::mock(STLFileReader::class)->shouldAllowMockingProtectedMethods();
 
