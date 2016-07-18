@@ -18,63 +18,6 @@ namespace AppBundle\Service\STL;
 class STLMillingEdit
 {
     private $stlFileContentArray;
-    private $length;
-    private $height;
-    private $width;
-
-    /**
-     * @return mixed
-     */
-    public function getLength() : int
-    {
-        return $this->length;
-    }
-
-    /**
-     * @param mixed $length
-     * @return STLMillingEdit
-     */
-    public function setLength($length) : STLMillingEdit
-    {
-        $this->length = $length;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getHeight() : int
-    {
-        return $this->height;
-    }
-
-    /**
-     * @param mixed $height
-     * @return STLMillingEdit
-     */
-    public function setHeight($height) : STLMillingEdit
-    {
-        $this->height = $height;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getWidth() : int
-    {
-        return $this->width;
-    }
-
-    /**
-     * @param mixed $width
-     * @return STLMillingEdit
-     */
-    public function setWidth($width) : STLMillingEdit
-    {
-        $this->width = $width;
-        return $this;
-    }
 
     /**
      * @return mixed
@@ -94,9 +37,7 @@ class STLMillingEdit
         return $this;
     }
 
-    public function __construct(int $length, int $height, int $width) {
-        $this->setLength($length)
-            ->setHeight($height)
-            ->setWidth($width);
+    public function __construct(array $stlFileContentArray) {
+        $this->setStlFileContentArray($stlFileContentArray);
     }
 }
