@@ -44,9 +44,9 @@ class STLMillingEdit
     /**
      * Lowest possible X coordinate of a vertex.
      *
-     * @return int
+     * @return float
      */
-    public function getLowestVertexX() : int {
+    public function getLowestVertexX() : float {
         $min = null;
         foreach ($this->getStlFileContentArray()["facet-normals"] as $facetNormal) {
             for ($i = 0; $i < 3; $i++) {
@@ -66,9 +66,9 @@ class STLMillingEdit
     /**
      * Highest possible X coordinate of a vertex.
      *
-     * @return int
+     * @return float
      */
-    public function getHighestVertexX() : int {
+    public function getHighestVertexX() : float {
         $max = null;
         foreach ($this->getStlFileContentArray()["facet-normals"] as $facetNormal) {
             for ($i = 0; $i < 3; $i++) {
