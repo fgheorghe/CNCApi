@@ -25,6 +25,11 @@ class STLEditCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $fileName = $input->getArgument('filename');
+
+        $stlFileReader = new STLFileReader(file_get_contents($fileName));
+        $output->writeln("Solid Name: " . $stlFileReader->getName());
+
         // TODO: Implement.
     }
 }
