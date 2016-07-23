@@ -7,10 +7,13 @@
  */
 
 namespace AppBundle\Service\STL;
+
 use Symfony\Component\DependencyInjection\Container;
 use AppBundle\Service\STL\STLFileReader;
 use AppBundle\Service\STL\STLMillingEdit;
 use Doctrine\DBAL\Connection;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
 
 /**
  * Class STL. Provides STL conversion functionality.
@@ -22,6 +25,25 @@ class STL
     private $stlFileReader;
     private $stlMillingEditor;
     private $databaseConnection;
+    private $queueConnection;
+
+    /**
+     * @return mixed
+     */
+    public function getQueueConnection() : AMQPStreamConnection
+    {
+        return $this->queueConnection;
+    }
+
+    /**
+     * @param mixed $queueConnection
+     * @return STL
+     */
+    public function setQueueConnection($queueConnection) : STL
+    {
+        $this->queueConnection = $queueConnection;
+        return $this;
+    }
 
     /**
      * @return mixed
@@ -35,7 +57,7 @@ class STL
      * @param mixed $databaseConnection
      * @return STL
      */
-    public function setDatabaseConnection(Connection $databaseConnection)
+    public function setDatabaseConnection(Connection $databaseConnection) : STL
     {
         $this->databaseConnection = $databaseConnection;
         return $this;
@@ -101,13 +123,20 @@ class STL
      * @param \AppBundle\Service\STL\STLFileReader $stlFileReader
      * @param Connection $databaseConnection
      */
-    public function __construct(Container $container, STLFileReader $stlFileReader, Connection $databaseConnection) {
+    public function __construct(
+        Container $container,
+        STLFileReader $stlFileReader,
+        Connection $databaseConnection,
+        AMQPStreamConnection $queueConnection
+    ) {
         $this->setContainer($container);
         $this->setStlFileReader($stlFileReader);
         $this->setDatabaseConnection($databaseConnection);
+        $this->setQueueConnection($queueConnection);
     }
 
-    public function upload() {
+    public function upload()
+    {
         $name = $this->getStlFileReader()->getName();
         $data = $this->getStlFileReader()->getStlFileString();
 

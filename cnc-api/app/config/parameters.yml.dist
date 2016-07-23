@@ -17,3 +17,11 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
+
+    rabbit_mq_host: localhost
+    rabbit_mq_port: 5672
+    rabbit_mq_user: guest
+    rabbit_mq_password: guest
+    rabbit_mq_vhost: /
+    rabbit_mq_stl_queue_name: 'stl'
+    rabbit_mq_exchange_name: 'router'

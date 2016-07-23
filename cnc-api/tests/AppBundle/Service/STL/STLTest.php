@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\Container;
 use AppBundle\Service\STL\STL;
 use AppBundle\Service\STL\STLFileReader;
 use Doctrine\DBAL\Connection;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 
 class STLTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,11 +37,12 @@ EOT;
         \Mockery::close();
     }
 
-    public function testContainerStlEditAndStlFileReaderServicesAreSet() {
+    public function testContainerStlFileReaderDatabaseConnectionAndQueueConnectionDependenciesAreSet() {
         // Service and stl file reader container mocks.
         $containerMock = \Mockery::mock(Container::class);
         $stlFileReaderMock = \Mockery::mock(STLFileReader::class);
         $databaseConnectionMock = \Mockery::mock(Connection::class);
+        $queueConnectionMock = \Mockery::mock(AMQPStreamConnection::class);
 
         // Prepare a mock of the setContainer method.
         $stlLibraryMock = \Mockery::mock(STL::class)
@@ -58,6 +60,10 @@ EOT;
             ->with($databaseConnectionMock)
             ->once();
 
+        $stlLibraryMock->shouldReceive('setQueueConnection')
+            ->with($queueConnectionMock)
+            ->once();
+
         // Now get the original constructor.
         $reflectedStlLibraryClass = new \ReflectionClass(STL::class);
         $reflectedStlLibraryClassConstructor = $reflectedStlLibraryClass->getConstructor();
@@ -67,7 +73,8 @@ EOT;
             $stlLibraryMock,
             $containerMock,
             $stlFileReaderMock,
-            $databaseConnectionMock
+            $databaseConnectionMock,
+            $queueConnectionMock
         );
     }
 
@@ -76,6 +83,7 @@ EOT;
         $containerMock = \Mockery::mock(Container::class);
         $stlFileReaderMock = \Mockery::mock(STLFileReader::class);
         $databaseConnectionMock = \Mockery::mock(Connection::class);
+        $queueConnectionMock = \Mockery::mock(AMQPStreamConnection::class);
 
         $stlFileReaderMock->shouldReceive('getName')
             ->once()
@@ -93,7 +101,7 @@ EOT;
                 "data" => $this->stlFileString
             ));
 
-        $stlLibrary = new STL($containerMock, $stlFileReaderMock, $databaseConnectionMock);
+        $stlLibrary = new STL($containerMock, $stlFileReaderMock, $databaseConnectionMock, $queueConnectionMock);
         $stlLibrary->upload();
     }
 }
