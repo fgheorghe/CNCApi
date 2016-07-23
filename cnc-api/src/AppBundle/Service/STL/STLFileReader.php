@@ -78,12 +78,14 @@ class STLFileReader
      */
     public function getFacetNormalCoordinates(string $facetNormal) : array {
         $firstLine = explode("\n",$facetNormal)[0];
-        $bits = explode(" ", $firstLine);
+        $pattern = "/facet normal +(\-*\d+\.*\d*e*\-*\+*\d*) +(\-*\d+\.*\d*e*\-*\+*\d*) +(\-*\d+\.*\d*e*\-*\+*\d*)/";
+
+        preg_match($pattern, trim($firstLine), $matches);
 
         return array(
-            (float) $bits[2],
-            (float) $bits[3],
-            (float) $bits[4]
+            (float) $matches[1],
+            (float) $matches[2],
+            (float) $matches[3]
         );
     }
 
@@ -100,11 +102,13 @@ class STLFileReader
         // Ignore first, second, second to last and last lines, as these define the facet normal start and end and outer
         // loops start and end.
         for ($i = 2; $i < count($lines) - 2; $i++) {
-            $bits = explode(" ", $lines[$i]);
+            $pattern = "/vertex +(\-*\d+\.*\d*e*\-*\+*\d*) +(\-*\d+\.*\d*e*\-*\+*\d*) +(\-*\d+\.*\d*e*\-*\+*\d*)/";
+
+            preg_match($pattern, trim($lines[$i]), $matches);
             $coordinates[] = array(
-                (float) $bits[1],
-                (float) $bits[2],
-                (float) $bits[3]
+                (float) $matches[1],
+                (float) $matches[2],
+                (float) $matches[3]
             );
         }
 
