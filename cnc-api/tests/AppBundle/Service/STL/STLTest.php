@@ -7,6 +7,8 @@ use AppBundle\Service\STL\STL;
 use AppBundle\Service\STL\STLFileReader;
 use Doctrine\DBAL\Connection;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Channel\AMQPChannel;
+use PhpAmqpLib\Message\AMQPMessage;
 
 class STLTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,7 +39,7 @@ EOT;
         \Mockery::close();
     }
 
-    public function testContainerStlFileReaderDatabaseConnectionAndQueueConnectionDependenciesAreSet() {
+    public function testContainerStlFileReaderDatabaseConnectionAndQueueConnectionDependenciesAndQueueNameAreSet() {
         // Service and stl file reader container mocks.
         $containerMock = \Mockery::mock(Container::class);
         $stlFileReaderMock = \Mockery::mock(STLFileReader::class);
@@ -64,6 +66,14 @@ EOT;
             ->with($queueConnectionMock)
             ->once();
 
+        $stlLibraryMock->shouldReceive('setQueueName')
+            ->with('test')
+            ->once();
+
+        $stlLibraryMock->shouldReceive('setExchangeName')
+            ->with('test')
+            ->once();
+
         // Now get the original constructor.
         $reflectedStlLibraryClass = new \ReflectionClass(STL::class);
         $reflectedStlLibraryClassConstructor = $reflectedStlLibraryClass->getConstructor();
@@ -74,16 +84,19 @@ EOT;
             $containerMock,
             $stlFileReaderMock,
             $databaseConnectionMock,
-            $queueConnectionMock
+            $queueConnectionMock,
+            'test',
+            'test'
         );
     }
 
-    public function testStlFileIsUploadedToDatabase() {
+    public function testStlFileIsUploadedToDatabaseAndAddedToQueue() {
         // Service and stl file reader container mocks.
         $containerMock = \Mockery::mock(Container::class);
         $stlFileReaderMock = \Mockery::mock(STLFileReader::class);
         $databaseConnectionMock = \Mockery::mock(Connection::class);
         $queueConnectionMock = \Mockery::mock(AMQPStreamConnection::class);
+        $queueChannelMock = \Mockery::mock(AMQPChannel::class);
 
         $stlFileReaderMock->shouldReceive('getName')
             ->once()
@@ -101,7 +114,32 @@ EOT;
                 "data" => $this->stlFileString
             ));
 
-        $stlLibrary = new STL($containerMock, $stlFileReaderMock, $databaseConnectionMock, $queueConnectionMock);
+        $queueConnectionMock->shouldReceive('channel')
+            ->once()
+            ->andReturn($queueChannelMock);
+
+        $queueChannelMock->shouldReceive('queue_declare')
+            ->once()
+            // As per: https://github.com/php-amqplib/php-amqplib/blob/master/demo/amqp_publisher.php
+            ->with('test', false, true, false, false);
+
+        $queueChannelMock->shouldReceive('exchange_declare')
+            ->once()
+            // As per: https://github.com/php-amqplib/php-amqplib/blob/master/demo/amqp_publisher.php
+            ->with('test', 'direct', false, true, false);
+
+        $queueChannelMock->shouldReceive('queue_bind')
+            ->once()
+            // As per: https://github.com/php-amqplib/php-amqplib/blob/master/demo/amqp_publisher.php
+            ->with('test', 'test');
+
+        $queueChannelMock->shouldReceive('basic_publish')
+            ->once();
+
+        $queueChannelMock->shouldReceive('close')
+            ->once();
+
+        $stlLibrary = new STL($containerMock, $stlFileReaderMock, $databaseConnectionMock, $queueConnectionMock, 'test', 'test');
         $stlLibrary->upload();
     }
 }

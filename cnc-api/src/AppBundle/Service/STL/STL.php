@@ -26,6 +26,44 @@ class STL
     private $stlMillingEditor;
     private $databaseConnection;
     private $queueConnection;
+    private $queueName;
+    private $exchangeName;
+
+    /**
+     * @return mixed
+     */
+    public function getExchangeName() : string
+    {
+        return $this->exchangeName;
+    }
+
+    /**
+     * @param mixed $exchangeName
+     * @return STL
+     */
+    public function setExchangeName(string $exchangeName) : STL
+    {
+        $this->exchangeName = $exchangeName;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getQueueName() : string
+    {
+        return $this->queueName;
+    }
+
+    /**
+     * @param mixed $queueName
+     * @return STL
+     */
+    public function setQueueName(string $queueName) : STL
+    {
+        $this->queueName = $queueName;
+        return $this;
+    }
 
     /**
      * @return mixed
@@ -122,17 +160,23 @@ class STL
      * @param Container $container
      * @param \AppBundle\Service\STL\STLFileReader $stlFileReader
      * @param Connection $databaseConnection
+     * @param String $queueName
+     * @param String $exchangeName
      */
     public function __construct(
         Container $container,
         STLFileReader $stlFileReader,
         Connection $databaseConnection,
-        AMQPStreamConnection $queueConnection
+        AMQPStreamConnection $queueConnection,
+        string $queueName,
+        string $exchangeName
     ) {
         $this->setContainer($container);
         $this->setStlFileReader($stlFileReader);
         $this->setDatabaseConnection($databaseConnection);
         $this->setQueueConnection($queueConnection);
+        $this->setQueueName($queueName);
+        $this->setExchangeName($exchangeName);
     }
 
     public function upload()
@@ -149,5 +193,20 @@ class STL
                     "data" => $data
                 )
             );
+
+        $channel = $this->getQueueConnection()->channel();
+        // As per: https://github.com/php-amqplib/php-amqplib/blob/master/demo/amqp_publisher.php
+        $channel->queue_declare($this->getQueueName(), false, true, false, false);
+        $channel->exchange_declare($this->getExchangeName(), 'direct', false, true, false);
+        $channel->queue_bind($this->getQueueName(), $this->getExchangeName());
+        $channel->basic_publish(new AMQPMessage(
+            $data,
+            array(
+                'content_type' => 'text/plain',
+                'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT
+            )
+        ), $this->getExchangeName());
+
+        $channel->close();
     }
 }
