@@ -179,6 +179,9 @@ class STL
         $this->setExchangeName($exchangeName);
     }
 
+    /**
+     * Uploads an STL file to the database, and pushes it to a queue.
+     */
     public function upload()
     {
         $name = $this->getStlFileReader()->getName();
@@ -201,6 +204,37 @@ class STL
         $channel->queue_bind($this->getQueueName(), $this->getExchangeName());
         $channel->basic_publish(new AMQPMessage(
             $data,
+            array(
+                'content_type' => 'text/plain',
+                'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT
+            )
+        ), $this->getExchangeName());
+
+        $channel->close();
+    }
+
+    public function unpack() {
+        $millingEdit = new STLMillingEdit($this->getStlFileReader()->toArray());
+        $name = $this->getStlFileReader()->getName();
+        $coordinates = $millingEdit->extractMillingContent()->getStlFileContentArray();
+
+        $this->getDatabaseConnection()
+            ->executeQuery(
+                "UPDATE stl_objects SET stl_object_status = :status, stl_object_coordinates = :coordinates WHERE stl_object_name = :name LIMIT 1",
+                array(
+                    "status" => "coordinates",
+                    "coordinates" => json_encode($coordinates),
+                    "name" => $name
+                )
+            );
+
+        $channel = $this->getQueueConnection()->channel();
+        // As per: https://github.com/php-amqplib/php-amqplib/blob/master/demo/amqp_publisher.php
+        $channel->queue_declare($this->getQueueName(), false, true, false, false);
+        $channel->exchange_declare($this->getExchangeName(), 'direct', false, true, false);
+        $channel->queue_bind($this->getQueueName(), $this->getExchangeName());
+        $channel->basic_publish(new AMQPMessage(
+            json_encode($coordinates),
             array(
                 'content_type' => 'text/plain',
                 'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT
