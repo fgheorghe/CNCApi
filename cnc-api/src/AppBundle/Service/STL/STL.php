@@ -106,4 +106,19 @@ class STL
         $this->setStlFileReader($stlFileReader);
         $this->setDatabaseConnection($databaseConnection);
     }
+
+    public function upload() {
+        $name = $this->getStlFileReader()->getName();
+        $data = $this->getStlFileReader()->getStlFileString();
+
+        $this->getDatabaseConnection()
+            ->executeQuery(
+                "INSERT INTO stl_objects SET stl_object_name = :name, stl_object_status = :status, stl_object_data = :data",
+                array(
+                    "name" => $name,
+                    "status" => "raw",
+                    "data" => $data
+                )
+            );
+    }
 }
