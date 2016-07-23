@@ -13,3 +13,6 @@ services:
     stlMillingEdit:
         class: AppBundle\Service\STL\STLMillingEdit
         arguments: []
+    stlToGCode:
+        class: AppBundle\Service\GCode\STLToGCode
+        arguments: []
