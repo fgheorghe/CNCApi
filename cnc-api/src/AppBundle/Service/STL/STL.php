@@ -10,6 +10,7 @@ namespace AppBundle\Service\STL;
 use Symfony\Component\DependencyInjection\Container;
 use AppBundle\Service\STL\STLFileReader;
 use AppBundle\Service\STL\STLMillingEdit;
+use Doctrine\DBAL\Connection;
 
 /**
  * Class STL. Provides STL conversion functionality.
@@ -20,6 +21,25 @@ class STL
     private $container;
     private $stlFileReader;
     private $stlMillingEditor;
+    private $databaseConnection;
+
+    /**
+     * @return mixed
+     */
+    public function getDatabaseConnection() : Connection
+    {
+        return $this->databaseConnection;
+    }
+
+    /**
+     * @param mixed $databaseConnection
+     * @return STL
+     */
+    public function setDatabaseConnection(Connection $databaseConnection)
+    {
+        $this->databaseConnection = $databaseConnection;
+        return $this;
+    }
 
     /**
      * @return STLMillingEdit
@@ -79,11 +99,11 @@ class STL
      * STL constructor.
      * @param Container $container
      * @param \AppBundle\Service\STL\STLFileReader $stlFileReader
-     * @param \AppBundle\Service\STL\STLMillingEdit $stlEditor
+     * @param Connection $databaseConnection
      */
-    public function __construct(Container $container, STLFileReader $stlFileReader, STLMillingEdit $stlEditor) {
+    public function __construct(Container $container, STLFileReader $stlFileReader, Connection $databaseConnection) {
         $this->setContainer($container);
         $this->setStlFileReader($stlFileReader);
-        $this->setStlMillingEditor($stlEditor);
+        $this->setDatabaseConnection($databaseConnection);
     }
 }

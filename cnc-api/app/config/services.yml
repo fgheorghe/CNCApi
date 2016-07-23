@@ -4,15 +4,3 @@ parameters:
 #    parameter_name: value
 
 services:
-    stl:
-        class: AppBundle\Service\STL\STL
-        arguments: [ "@service_container", 'stlFileReader', 'stlMillingEdit' ]
-    stlFileReader:
-        class: AppBundle\Service\STL\STLFileReader
-        arguments: []
-    stlMillingEdit:
-        class: AppBundle\Service\STL\STLMillingEdit
-        arguments: []
-    stlToGCode:
-        class: AppBundle\Service\GCode\STLToGCode
-        arguments: []
