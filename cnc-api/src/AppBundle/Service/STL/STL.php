@@ -75,6 +75,12 @@ class STL
         return $this;
     }
 
+    /**
+     * STL constructor.
+     * @param Container $container
+     * @param \AppBundle\Service\STL\STLFileReader $stlFileReader
+     * @param \AppBundle\Service\STL\STLMillingEdit $stlEditor
+     */
     public function __construct(Container $container, STLFileReader $stlFileReader, STLMillingEdit $stlEditor) {
         $this->setContainer($container);
         $this->setStlFileReader($stlFileReader);

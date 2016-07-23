@@ -48,4 +48,8 @@ class STLTest extends \PHPUnit_Framework_TestCase
             $stlMillingEditorMock
         );
     }
+
+    public function testStlFileIsUploadedToDatabase() {
+        $this->markTestIncomplete('TODO');
+    }
 }
