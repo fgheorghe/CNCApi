@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use AppBundle\Service\STL\STLMillingEdit;
 
 class STLEditCommand extends ContainerAwareCommand
 {
@@ -14,7 +15,7 @@ class STLEditCommand extends ContainerAwareCommand
     {
         $this
             ->setName('stl:edit')
-            ->setDescription('Edit and STL file.')
+            ->setDescription('Edit an STL file.')
             ->addArgument(
                 'filename',
                 InputArgument::REQUIRED,
@@ -27,8 +28,7 @@ class STLEditCommand extends ContainerAwareCommand
         $fileName = $input->getArgument('filename');
 
         $stlFileReader = new STLFileReader(file_get_contents($fileName));
-        $output->writeln("Solid Name: " . $stlFileReader->getName());
-
-        // TODO: Implement.
+        $stlMillEditor = new STLMillingEdit($stlFileReader->toArray());
+        $output->writeln($stlFileReader->setStlFileStringFromArray($stlMillEditor->extractMillingContent()->getStlFileContentArray())->getStlFileString());
     }
 }
