@@ -54,6 +54,10 @@ class STLFileReader
             if (substr(trim($line), 0, 5) == "solid" || substr(trim($line), 0, 8) == "endsolid") {
                 continue;
             }
+            // Ignore empty lines.
+            if (empty($line)) {
+                continue;
+            }
 
             // Append to current facet string.
             $facetStrings[$currentFacetString] = ($facetStrings[$currentFacetString] ?? "") . trim($line) . "\n";
