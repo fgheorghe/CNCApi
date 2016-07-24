@@ -73,4 +73,26 @@ class STLController extends Controller
             )
         ));
     }
+
+    /**
+     * Get STL file content as a string.
+     *
+     * @Route("/data/{name}", name="stl-data-get")
+     * @Method({"GET"})
+     * @ApiDoc(
+     *  resource=true
+     * )
+     */
+    public function getDataAction(Request $request)
+    {
+        $name = $request->get('name');
+
+        $data = (new STLUtil())->getStlData($name, $this->getDoctrine());
+
+        return $this->render('default/index.html.twig', array(
+            'content' => array(
+                "data" => $data
+            )
+        ));
+    }
 }
