@@ -11,6 +11,7 @@ use AppBundle\Service\STL\STL;
 use AppBundle\Service\STL\STLFileReader;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use Exception;
+use AppBundle\Service\STL\STLUtil;
 
 /**
  * @Route("/stl", defaults={"_format"="json"})
@@ -31,28 +32,11 @@ class STLController extends Controller
      */
     public function uploadAction(Request $request)
     {
-        // TODO: Remove redundant code -> used by upload command.
         $file = $request->files->get('file');
         $content = file_get_contents($file->getRealPath());
 
-        $stl = new STL(
-            $this->container,
-            new STLFileReader($content),
-            $this->container->get('doctrine')->getManager()->getConnection(),
-            // As per: https://github.com/php-amqplib/php-amqplib/blob/master/demo/amqp_publisher.php
-            new AMQPStreamConnection(
-                $this->container->getParameter('rabbit_mq_host'),
-                $this->container->getParameter('rabbit_mq_port'),
-                $this->container->getParameter('rabbit_mq_user'),
-                $this->container->getParameter('rabbit_mq_password'),
-                $this->container->getParameter('rabbit_mq_vhost')
-            ),
-            $this->container->getParameter('rabbit_mq_stl_queue_name'),
-            $this->container->getParameter('rabbit_mq_stl_exchange_name')
-        );
-
         try {
-            $stl->upload();
+            (new STLUtil())->upload($content, $this->container);
             return $this->render('default/index.html.twig', array(
                 'content' => array(
                     "success" => true
@@ -79,20 +63,13 @@ class STLController extends Controller
      */
     public function getCoordinatesAction(Request $request)
     {
-        // TODO: Move to a service...don't allow SQL in controllers. This is an experiment.
         $name = $request->get('name');
 
-        $result = $this->getDoctrine()->getConnection()
-            ->executeQuery(
-                "SELECT stl_object_coordinates FROM stl_objects WHERE stl_object_name = :name LIMIT 1",
-                array(
-                    "name" => $name
-                )
-            )->fetchAll(\PDO::FETCH_ASSOC);
+        $coordinates = (new STLUtil())->getCoordinates($name, $this->getDoctrine());
 
         return $this->render('default/index.html.twig', array(
             'content' => array(
-                "data" => json_decode($result[0]["stl_object_coordinates"])
+                "data" => $coordinates
             )
         ));
     }

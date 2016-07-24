@@ -213,6 +213,9 @@ class STL
         $channel->close();
     }
 
+    /**
+     * Extracts coordinates and saves them in the database as a JSON object.
+     */
     public function unpack() {
         $millingEdit = new STLMillingEdit($this->getStlFileReader()->toArray());
         $name = $this->getStlFileReader()->getName();
