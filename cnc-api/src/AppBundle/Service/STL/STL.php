@@ -181,15 +181,18 @@ class STL
 
     /**
      * Uploads an STL file to the database, and pushes it to a queue.
+     * @param Boolean $replace
      */
-    public function upload()
+    public function upload($replace = false)
     {
         $name = $this->getStlFileReader()->getName();
         $data = $this->getStlFileReader()->getStlFileString();
 
         $this->getDatabaseConnection()
             ->executeQuery(
-                "INSERT INTO stl_objects SET stl_object_name = :name, stl_object_status = :status, stl_object_data = :data",
+                $replace
+                    ? "REPLACE INTO stl_objects SET stl_object_name = :name, stl_object_status = :status, stl_object_data = :data"
+                    : "INSERT INTO stl_objects SET stl_object_name = :name, stl_object_status = :status, stl_object_data = :data",
                 array(
                     "name" => $name,
                     "status" => "raw",

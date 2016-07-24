@@ -21,8 +21,9 @@ class STLUtil {
      * Convenience method used for creating a queue connection and uploading the STL file.
      * @param string $content
      * @param Container $container
+     * @param Boolean $replace
      */
-    public function upload(string $content, Container $container) {
+    public function upload(string $content, Container $container, $replace = false) {
         $stl = new STL(
             $container,
             new STLFileReader($content),
@@ -39,14 +40,14 @@ class STLUtil {
             $container->getParameter('rabbit_mq_stl_exchange_name')
         );
 
-        $stl->upload();
+        $stl->upload($replace);
     }
 
     /**
      * Fetches STL coordinates object.
      *
      * @param string $name
-     * @return array
+     * @return \stdClass
      */
     public function getCoordinates(string $name, Registry $doctrine) : \stdClass {
         $result = $doctrine->getConnection()
@@ -58,5 +59,23 @@ class STLUtil {
             )->fetchAll(\PDO::FETCH_ASSOC);
 
         return json_decode($result[0]["stl_object_coordinates"]);
+    }
+
+    /**
+     * Fetches STL object data.
+     *
+     * @param string $name
+     * @return string
+     */
+    public function getStlData(string $name, Registry $doctrine) : string {
+        $result = $doctrine->getConnection()
+            ->executeQuery(
+                "SELECT stl_object_data FROM stl_objects WHERE stl_object_name = :name LIMIT 1",
+                array(
+                    "name" => $name
+                )
+            )->fetchAll(\PDO::FETCH_ASSOC);
+
+        return $result[0]["stl_object_data"];
     }
 }
