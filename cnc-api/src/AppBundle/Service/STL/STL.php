@@ -217,20 +217,22 @@ class STL
     }
 
     /**
-     * Extracts coordinates and saves them in the database as a JSON object.
+     * Extracts coordinates and saves them in the database as a JSON object and an interim STL file.
      */
     public function unpack() {
         $millingEdit = new STLMillingEdit($this->getStlFileReader()->toArray());
         $name = $this->getStlFileReader()->getName();
         $coordinates = $millingEdit->extractMillingContent()->getStlFileContentArray();
+        $this->getStlFileReader()->setStlFileStringFromArray($coordinates);
 
         $this->getDatabaseConnection()
             ->executeQuery(
-                "UPDATE stl_objects SET stl_object_status = :status, stl_object_coordinates = :coordinates WHERE stl_object_name = :name LIMIT 1",
+                "UPDATE stl_objects SET stl_object_status = :status, stl_object_coordinates = :coordinates, stl_object_interim_data = :interim WHERE stl_object_name = :name LIMIT 1",
                 array(
                     "status" => "coordinates",
                     "coordinates" => json_encode($coordinates),
-                    "name" => $name
+                    "name" => $name,
+                    "interim" => $this->getStlFileReader()->getStlFileString()
                 )
             );
 
@@ -240,7 +242,7 @@ class STL
         $channel->exchange_declare($this->getExchangeName(), 'direct', false, true, false);
         $channel->queue_bind($this->getQueueName(), $this->getExchangeName());
         $channel->basic_publish(new AMQPMessage(
-            json_encode($coordinates),
+            $this->getStlFileReader()->getStlFileString(),
             array(
                 'content_type' => 'text/plain',
                 'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT

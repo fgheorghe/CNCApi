@@ -38,7 +38,7 @@ EOT;
     );
 
     private $uploadSQL = "INSERT INTO stl_objects SET stl_object_name = :name, stl_object_status = :status, stl_object_data = :data";
-    private $unpackSQL = "UPDATE stl_objects SET stl_object_status = :status, stl_object_coordinates = :coordinates WHERE stl_object_name = :name LIMIT 1";
+    private $unpackSQL = "UPDATE stl_objects SET stl_object_status = :status, stl_object_coordinates = :coordinates, stl_object_interim_data = :interim WHERE stl_object_name = :name LIMIT 1";
 
     public function tearDown()
     {
@@ -165,12 +165,21 @@ EOT;
             ->once()
             ->andReturn($this->stlFileArray);
 
+        $stlFileReaderMock->shouldReceive('getStlFileString')
+            ->twice()
+            ->andReturn($this->stlFileString);
+
+        $stlFileReaderMock->shouldReceive('setStlFileStringFromArray')
+            ->once()
+            ->withAnyArgs();
+
         $databaseConnectionMock->shouldReceive('executeQuery')
             ->once()
             ->with($this->unpackSQL, array(
                 "status" => "coordinates",
                 "coordinates" => json_encode($this->stlFileArray),
-                "name" => $this->stlObjectName
+                "name" => $this->stlObjectName,
+                "interim" => $this->stlFileString
             ));
 
         $queueConnectionMock->shouldReceive('channel')

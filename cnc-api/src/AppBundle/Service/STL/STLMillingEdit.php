@@ -174,10 +174,10 @@ class STLMillingEdit
 
         foreach ($contentArray["facet-normals"] as $facetNormal) {
             $skip = false;
-            for ($i = 0; $i < 3; $i++) {
-                if ($facetNormal["vertices"][$i][1] == $this->getHighestVertexY()) {
-                    $skip = true;
-                }
+            if ($facetNormal["vertices"][0][1] == $this->getHighestVertexY() &&
+                $facetNormal["vertices"][1][1] == $this->getHighestVertexY() &&
+                $facetNormal["vertices"][2][1] == $this->getHighestVertexY()) {
+                $skip = true;
             }
             if (!$skip) {
                 $facetNormals[] = $facetNormal;
@@ -203,10 +203,10 @@ class STLMillingEdit
 
         foreach ($contentArray["facet-normals"] as $facetNormal) {
             $skip = false;
-            for ($i = 0; $i < 3; $i++) {
-                if ($facetNormal["vertices"][$i][1] == $this->getLowestVertexY()) {
-                    $skip = true;
-                }
+            if ($facetNormal["vertices"][0][1] == $this->getLowestVertexY() &&
+                $facetNormal["vertices"][1][1] == $this->getLowestVertexY() &&
+                $facetNormal["vertices"][2][1] == $this->getLowestVertexY()) {
+                $skip = true;
             }
             if (!$skip) {
                 $facetNormals[] = $facetNormal;
