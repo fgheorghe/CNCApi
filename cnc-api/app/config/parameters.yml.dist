@@ -17,3 +17,15 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
+
+    rabbit_mq_host: localhost
+    rabbit_mq_port: 5672
+    rabbit_mq_user: guest
+    rabbit_mq_password: guest
+    rabbit_mq_vhost: /
+    rabbit_mq_raw_stl_queue_name: 'raw-stl'
+    rabbit_mq_mill_queue_name: 'mill-stl'
+    rabbit_mq_gcode_queue_name: 'gcode'
+    rabbit_mq_raw_exchange_name: 'raw-stl'
+    rabbit_mq_mill_exchange_name: 'mill-stl'
+    rabbit_mq_gcode_exchange_name: 'gcode'

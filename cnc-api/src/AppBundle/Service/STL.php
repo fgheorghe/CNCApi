@@ -5,6 +5,8 @@ namespace AppBundle\Service;
 use Symfony\Component\DependencyInjection\Container;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
 
 /**
  * Class STL
@@ -66,6 +68,32 @@ class STL {
             "stl_object_data" => $fileContent,
             "stl_object_coordinates" => json_encode($stl->toArray())
         ));
+
+        // As per: https://github.com/php-amqplib/php-amqplib/blob/master/demo/amqp_publisher.php
+        $queueConnection = new AMQPStreamConnection(
+            $this->getContainer()->getParameter('rabbit_mq_host'),
+            $this->getContainer()->getParameter('rabbit_mq_port'),
+            $this->getContainer()->getParameter('rabbit_mq_user'),
+            $this->getContainer()->getParameter('rabbit_mq_password'),
+            $this->getContainer()->getParameter('rabbit_mq_vhost')
+        );
+
+        $queueName = $this->getContainer()->getParameter('rabbit_mq_raw_stl_queue_name');
+        $exchangeName = $this->getContainer()->getParameter('rabbit_mq_raw_exchange_name');
+
+        $channel = $queueConnection->channel();
+        // As per: https://github.com/php-amqplib/php-amqplib/blob/master/demo/amqp_publisher.php
+        $channel->queue_declare($queueName, false, true, false, false);
+        $channel->exchange_declare($exchangeName, 'direct', false, true, false);
+        $channel->queue_bind($queueName, $exchangeName);
+        $channel->basic_publish(new AMQPMessage(
+            $fileContent,
+            array(
+                'content_type' => 'text/plain',
+                'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT
+            )
+        ), $exchangeName);
+        $channel->close();
     }
 
     /**
