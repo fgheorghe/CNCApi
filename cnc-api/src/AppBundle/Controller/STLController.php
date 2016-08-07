@@ -7,11 +7,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Exception;
 use AppBundle\Service\STL;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * @Route("/stl", defaults={"_format"="json"})
  */
 class STLController extends Controller
 {
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
     /**
      * Raw STL file upload endpoint.
      *
@@ -30,9 +36,10 @@ class STLController extends Controller
         $content = file_get_contents($file->getRealPath());
 
         /**
-         * @var STL
+         * @var STL $stl
          */
         $stl = $this->container->get('stl');
+        $stl->upload($content);
 
         // TODO: Add error handling.
         return $this->render('default/index.html.twig', array(
