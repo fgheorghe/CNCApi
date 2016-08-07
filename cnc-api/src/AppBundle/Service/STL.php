@@ -66,4 +66,18 @@ class STL {
             "stl_object_coordinates" => json_encode($stl->toArray())
         ));
     }
+
+    /**
+     * Lists uploaded STL files.
+     *
+     * @return array
+     */
+    public function listStlFiles() : array
+    {
+        /**
+         * @var Connection $databaseConnection
+         */
+        $databaseConnection = $this->getContainer()->get('database_connection');
+        return $databaseConnection->fetchAll("SELECT stl_object_id, stl_object_name, stl_object_status FROM stl_objects ORDER BY stl_object_id ASC");
+    }
 }
