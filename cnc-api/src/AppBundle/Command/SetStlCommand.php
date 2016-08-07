@@ -7,15 +7,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use AppBundle\Service\STL;
 
-class GetStlCommand extends ContainerAwareCommand
+class SetStlCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
         $this
-            ->setName('stl:get')
-            ->setDescription('Fetches a given STL file database column data.')
+            ->setName('stl:set')
+            ->setDescription('Sets a given STL file database column data.')
             ->addArgument('id', InputArgument::REQUIRED, 'STL File ID.')
-            ->addArgument('column', InputArgument::REQUIRED, 'Database column name.');
+            ->addArgument('column', InputArgument::REQUIRED, 'Database column name.')
+            ->addArgument('value', InputArgument::REQUIRED, 'Database column value.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -25,6 +26,6 @@ class GetStlCommand extends ContainerAwareCommand
          */
         $stl = $this->getContainer()->get('stl');
 
-        $output->writeln($stl->get($input->getArgument('id'), $input->getArgument('column')));
+        $stl->set($input->getArgument('id'), $input->getArgument('column'), $input->getArgument('value'));
     }
 }

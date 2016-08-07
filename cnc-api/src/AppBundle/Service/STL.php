@@ -133,4 +133,30 @@ class STL {
             0
         ));
     }
+
+    /**
+     * Sets an STL object database value by id and a given column name.
+     *
+     * @param int $id
+     * @param string $column
+     * @param string $value
+     */
+    public function set(int $id, string $column, string $value)
+    {
+        if (!in_array(strtolower($column), array("stl_object_name", "stl_object_status", "stl_object_data", "stl_object_coordinates", "stl_object_mill_data", "stl_object_mill_coordinates", "stl_object_gcode_data")))
+        {
+            throw new Exception("Invalid column name.");
+        }
+
+        /**
+         * @var Connection $databaseConnection
+         */
+        $databaseConnection = $this->getContainer()->get('database_connection');
+        $databaseConnection->executeQuery("UPDATE stl_objects SET " . $column . " = :column_value WHERE stl_object_id = :stl_object_id LIMIT 1",
+            array(
+                "column_value" => $value,
+                "stl_object_id" => $id
+            )
+        );
+    }
 }
