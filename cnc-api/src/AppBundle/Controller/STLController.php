@@ -48,4 +48,32 @@ class STLController extends Controller
             )
         ));
     }
+
+    /**
+     * Fetches a given column data for a given STL file.
+     *
+     * @Route("/get", name="stl-get")
+     * @Method({"GET"})
+     * @ApiDoc(
+     *  resource=false,
+     *  parameters={
+     *      {"name"="column", "dataType"="string", "required"=true, "description"="Column name."},
+     *      {"name"="id", "dataType"="int", "required"=true, "description"="STL File ID."}
+     *  }
+     * )
+     */
+    public function getAction(Request $request)
+    {
+        $column = $request->get("column");
+        $id = $request->get("id");
+        /**
+         * @var STL $stl
+         */
+        $stl = $this->container->get('stl');
+
+        // TODO: Add error handling.
+        return $this->render('default/index.html.twig', array(
+            'content' => json_decode($stl->get($id, $column))
+        ));
+    }
 }

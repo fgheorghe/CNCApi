@@ -111,6 +111,24 @@ class STL {
     }
 
     /**
+     * Fetches an object id by name.
+     *
+     * @param string $name
+     * @return int
+     */
+    public function getId(string $name) : int
+    {
+        /**
+         * @var Connection $databaseConnection
+         */
+        $databaseConnection = $this->getContainer()->get('database_connection');
+        return $databaseConnection->fetchColumn("SELECT stl_object_id FROM stl_objects WHERE stl_object_name = :stl_object_name LIMIT 1", array(
+            "stl_object_name" => $name,
+            0
+        ));
+    }
+
+    /**
      * Fetches the content of a given column for a given STL file, by id.
      *
      * @param int $id
