@@ -10,7 +10,7 @@ date.timezone=Europe/London
 
 Run the Symfony 2 health check script:
 
-php cnc-api/app/check.php
+php cnc-api/bin/check.php
 
 Install composer (https://www.digitalocean.com/community/tutorials/how-to-install-and-use-composer-on-ubuntu-14-04):
 
@@ -18,17 +18,17 @@ curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/loca
 
 ###Configuration
 
-Edit cnc-api/app/config/parameters.yml
+Edit cnc-api/bin/config/parameters.yml
 
 ###Usage
 
 As per Symfony 2 documentation, issue:
 
-cd cnc-api && php app/console server:run 0.0.0.0:8000
+cd cnc-api && php bin/console server:run 0.0.0.0:8000
 
 Or to start as a background process:
 
-cd cnc-api && nohup php app/console server:run 0.0.0.0:8000 &
+cd cnc-api && nohup php bin/console server:run 0.0.0.0:8000 &
 
 Browse:
 
