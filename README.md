@@ -18,7 +18,7 @@ curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/loca
 
 ###Configuration
 
-Edit cnc-api/bin/config/parameters.yml
+Edit cnc-api/app/config/parameters.yml
 
 ###Usage
 
