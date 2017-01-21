@@ -14,30 +14,46 @@ use Exception;
 use AppBundle\Service\STL\STLUtil;
 
 /**
- * @Route("/stl", defaults={"_format"="json"})
+ * @Route("/job", defaults={"_format"="json"})
  */
-class STLController extends Controller
+class JobController extends Controller
 {
     /**
-     * Creates a new STL file record.
      *
-     * @Route("/upload", name="stl-upload")
+     * Create a new job for a given STL file id.
+     *
+     * @Route("/{stl-file-id}", name="create-job")
      * @Method({"POST"})
      * @ApiDoc(
      *  resource=false
      * )
      */
-    public function uploadAction(Request $request)
+    public function createAction(Request $request)
     {
         // TODO: Implement.
     }
 
     /**
-     * Updates a single field against an STL file
-     * identified by a numeric identifier.
      *
-     * @Route("/{id}", name="stl-update")
+     * Deletes an ongoing execution job for an STL file id.
+     *
+     * @Route("/{stl-file-id}", name="update-job")
      * @Method({"PATCH"})
+     * @ApiDoc(
+     *  resource=false
+     * )
+     */
+    public function deleteAction(Request $request)
+    {
+        // TODO: Implement.
+    }
+
+    /**
+     *
+     * Updates an STL job for a given STL file id.
+     *
+     * @Route("/{stl-file-id}", name="delete-job")
+     * @Method({"DELETE"})
      * @ApiDoc(
      *  resource=false
      * )
@@ -49,30 +65,15 @@ class STLController extends Controller
 
     /**
      *
-     * Returns a specific STL file.
+     * Lists jobs.
      *
-     * @Route("/{id}", name="stl-fetch")
-     * @Method({"GET"})
+     * @Route("/", name="list-job")
+     * @Method({"DELETE"})
      * @ApiDoc(
      *  resource=false
      * )
      */
-    public function fetchAction(Request $request)
-    {
-        // TODO: Implement.
-    }
-
-    /**
-     *
-     * Lists STL files.
-     *
-     * @Route("/", name="stl-list")
-     * @Method({"GET"})
-     * @ApiDoc(
-     *  resource=false
-     * )
-     */
-    public function listAction(Request $request)
+    public function liastAction(Request $request)
     {
         // TODO: Implement.
     }

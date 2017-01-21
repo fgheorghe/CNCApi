@@ -14,29 +14,30 @@ use Exception;
 use AppBundle\Service\STL\STLUtil;
 
 /**
- * @Route("/stl", defaults={"_format"="json"})
+ * @Route("/machine", defaults={"_format"="json"})
  */
-class STLController extends Controller
+class MachineController extends Controller
 {
     /**
-     * Creates a new STL file record.
      *
-     * @Route("/upload", name="stl-upload")
+     * Adds a new machine to the database.
+     *
+     * @Route("/", name="create-machine")
      * @Method({"POST"})
      * @ApiDoc(
      *  resource=false
      * )
      */
-    public function uploadAction(Request $request)
+    public function createAction(Request $request)
     {
         // TODO: Implement.
     }
 
     /**
-     * Updates a single field against an STL file
-     * identified by a numeric identifier.
      *
-     * @Route("/{id}", name="stl-update")
+     * Updates individual fields of the data model of a machine.
+     *
+     * @Route("/{id}", name="update-machine")
      * @Method({"PATCH"})
      * @ApiDoc(
      *  resource=false
@@ -49,9 +50,24 @@ class STLController extends Controller
 
     /**
      *
-     * Returns a specific STL file.
+     * Sets a machine as offline.
      *
-     * @Route("/{id}", name="stl-fetch")
+     * @Route("/{id}", name="delete-machine")
+     * @Method({"DELETE"})
+     * @ApiDoc(
+     *  resource=false
+     * )
+     */
+    public function deleteAction(Request $request)
+    {
+        // TODO: Implement.
+    }
+
+    /**
+     *
+     * Allows visualisation of a machine details.
+     *
+     * @Route("/{id}", name="fetch-machine")
      * @Method({"GET"})
      * @ApiDoc(
      *  resource=false
@@ -64,9 +80,9 @@ class STLController extends Controller
 
     /**
      *
-     * Lists STL files.
+     * Lists machines.
      *
-     * @Route("/", name="stl-list")
+     * @Route("/", name="list-machine")
      * @Method({"GET"})
      * @ApiDoc(
      *  resource=false
